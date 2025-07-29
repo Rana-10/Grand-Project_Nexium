@@ -33,9 +33,19 @@ export default function RecipeForm({ onSubmit }: { onSubmit: (data: FormData) =>
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ ingredients, cuisine, mealType, diet });
+
+    const formData: FormData = {
+      ingredients,
+      cuisine,
+      mealType,
+      diet,
+    };
+
+    // Call parent callback if needed
+    onSubmit(formData);
+
   };
 
   const filteredIngredients = INGREDIENT_OPTIONS.filter((ing) =>
@@ -61,6 +71,7 @@ export default function RecipeForm({ onSubmit }: { onSubmit: (data: FormData) =>
                 type="checkbox"
                 checked={ingredients.includes(item)}
                 onChange={() => toggleIngredient(item)}
+                className="clickable"
               />
               <span>{item}</span>
             </div>
@@ -74,7 +85,7 @@ export default function RecipeForm({ onSubmit }: { onSubmit: (data: FormData) =>
         <select
           value={cuisine}
           onChange={(e) => setCuisine(e.target.value)}
-          className="w-full p-2 rounded bg-neutral-800 text-white"
+          className="clickable w-full p-2 rounded bg-neutral-800 text-white"
         >
           {CUISINES.map((c) => (
             <option key={c}>{c}</option>
@@ -88,7 +99,7 @@ export default function RecipeForm({ onSubmit }: { onSubmit: (data: FormData) =>
         <select
           value={mealType}
           onChange={(e) => setMealType(e.target.value)}
-          className="w-full p-2 rounded bg-neutral-800 text-white"
+          className="clickable w-full p-2 rounded bg-neutral-800 text-white"
         >
           {MEAL_TYPES.map((m) => (
             <option key={m}>{m}</option>
@@ -102,7 +113,7 @@ export default function RecipeForm({ onSubmit }: { onSubmit: (data: FormData) =>
         <select
           value={diet}
           onChange={(e) => setDiet(e.target.value)}
-          className="w-full p-2 rounded bg-neutral-800 text-white"
+          className=" clickable w-full p-2 rounded bg-neutral-800 text-white"
         >
           {DIETS.map((d) => (
             <option key={d}>{d}</option>
@@ -112,7 +123,7 @@ export default function RecipeForm({ onSubmit }: { onSubmit: (data: FormData) =>
 
       <button
         type="submit"
-        className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded w-full"
+        className="clickable bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded w-full"
       >
         Submit
       </button>
