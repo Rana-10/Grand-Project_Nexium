@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useEffect } from "react";
 import RecipeForm from "@/components/recipe_form";
 
 interface FormData {
@@ -14,6 +15,8 @@ export default function Home() {
   const [dishes, setDishes] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
 
 const handleFormSubmit = async (data: FormData) => {
   console.log("Form Data Submitted:", data);
@@ -67,31 +70,61 @@ const handleFormSubmit = async (data: FormData) => {
   } finally {
     setLoading(false);
   }
+
+  // const whatsappMessage = encodeURIComponent(dishes);
+  // const whatsappUrl = `https://wa.me/?text=${whatsappMessage}`;
+
 };
 
 
-  return (
-    <main className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center text-white font-sans p-4">
-      <h1 className="text-3xl font-bold text-red-500 mb-6">Recipe Generator</h1>
+return (
+  <main className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center text-white font-sans p-4">
+    <h1 className="text-3xl font-bold text-red-500 mb-6">Recipe Generator</h1>
 
-      <RecipeForm onSubmit={handleFormSubmit} />
+    <RecipeForm onSubmit={handleFormSubmit} />
 
-      {loading && (
-        <p className="mt-6 text-yellow-400">Generating recipes...</p>
-      )}
+    {loading && (
+      <p className="mt-6 text-yellow-400">Generating recipes...</p>
+    )}
 
-      {error && (
-        <p className="mt-6 text-red-500">Error: {error}</p>
-      )}
+    {error && (
+      <p className="mt-6 text-red-500">Error: {error}</p>
+    )}
 
-      {dishes && (
-        <div className="mt-6 p-4 bg-neutral-800 rounded-lg shadow-md max-w-xl w-full">
-          <h2 className="text-xl font-semibold text-green-400 mb-4">
-            Suggested Dishes:
-          </h2>
-          <pre className="whitespace-pre-wrap">{dishes}</pre>
-        </div>
-      )}
-    </main>
-  );
+{dishes && (
+  <>
+    <div className="mt-6 p-4 bg-neutral-800 rounded-lg shadow-md max-w-xl w-full">
+      <h2 className="text-xl font-semibold text-green-400 mb-4">
+        Suggested Dishes:
+      </h2>
+      <pre className="whitespace-pre-wrap">{dishes}</pre>
+    </div>
+
+    <a
+      href={`https://wa.me/?text=${encodeURIComponent(`Here are some dishes GPT suggested:\n\n${dishes}`)}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="bg-green-600 text-white px-4 py-2 rounded mt-4 inline-block"
+    >
+      Share on WhatsApp
+    </a>
+
+    <button
+      onClick={() => {
+        navigator.clipboard.writeText(`Here are some dishes GPT suggested:\n\n${dishes}`);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }}
+      className="bg-blue-600 text-white px-4 py-2 rounded mt-2 ml-2 inline-block hover:bg-blue-700 transition-colors duration-200 cursor-pointer"
+    >
+      Copy to Clipboard
+    </button>
+
+    {copied && <p className="text-sm text-green-400 mt-1">Copied!</p>}
+  </>
+)}
+
+  </main>
+);
+
 }
