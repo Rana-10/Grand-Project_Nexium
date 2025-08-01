@@ -81,7 +81,7 @@ export default function Home() {
   return (
         <div className="background-blur">
     <main className="min-h-screen flex flex-col items-center justify-center p-4" style={{ backgroundColor: "var(--color-background)", color: "var(--color-foreground)" }}>
-    <h1 className=" text-5xl font-pacifico text-[#283618] mb-8">Recipe Generator</h1>
+    <h1 className=" text-5xl font-pacifico text-[#283618] mb-8">ammibot ai</h1>
 
       <RecipeForm onSubmit={handleFormSubmit} />
 
