@@ -10,9 +10,9 @@ interface FormData {
 }
 
 const INGREDIENT_OPTIONS = [
-  "Onion", "Garlic", "Tomato", "Green Chili", "Cumin", "Coriander",
-  "Red Chili Powder", "Turmeric", "Salt", "Ginger", "Oil", "Garam Masala",
-  "Black Pepper", "Yogurt", "Butter", "Chicken", "Beef", "Rice", "Lentils", "Potato",
+  "Chana Daal", "Moong Daal", "Daal Maash", "Kaala chana", "Masoor Daal", "Cauliflower", "Garlic", "Tomato", "Onion", "Cumin",
+  "Turmeric", "Salt", "Spinach",
+  "Black Pepper", "Yogurt", "Beetroot", "Peas", "Butter", "Chicken", "Beef", "Rice", "Lentils", "Potato", "Eggplant",
 ];
 
 const CUISINES = ["Pakistani", "Indian", "Middle Eastern", "Afghani"];
