@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --color-background: #F9FAFB;
-  --color-foreground: #111827;
-  --color-primary: #4F46E5;      /* Indigo */
-  --color-secondary: #6366F1;    /* Soft Indigo */
-  --color-card: #FFFFFF;
-  --color-border: #E5E7EB;
+  --color-background: #fefae0;       /* Elegant cream background */
+  --color-foreground: #283618;       /* Deep olive for text */
+  --color-primary: #606c38;          /* Olive for primary buttons */
+  --color-secondary: #283618;        /* Deep olive for hover or secondary */
+
+  --color-card: #ffffff;             /* White cards to contrast the cream background */
+  --color-border: #d4c9a3;           /* Light beige/olive border */
 
   --font-sans: var(--font-geist-sans, Arial, Helvetica, sans-serif);
   --font-mono: var(--font-geist-mono, monospace);
@@ -14,12 +15,12 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #0a0a0a;
-    --color-foreground: #ededed;
-    --color-card: #171717;
-    --color-border: #2c2c2c;
-    --color-primary: #6366F1;
-    --color-secondary: #818cf8;
+    /*--color-background: #1d1d1d;     /* Dark background */
+    --color-foreground: #fefae0;     /* Light cream text in dark mode */
+    --color-card: #2c2c2c;           /* Dark card */
+    --color-border: #3c3c3c;         /* Dark border */
+    --color-primary: #a4b37f;        /* Muted olive green */
+    --color-secondary: #fefae0;      /* Cream hover */
   }
 }
 
@@ -29,7 +30,7 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Example usage */
+/* Buttons */
 .button {
   background-color: var(--color-primary);
   color: white;
@@ -45,6 +46,7 @@ body {
   background-color: var(--color-secondary);
 }
 
+/* Card Style */
 .card {
   background-color: var(--color-card);
   border: 1px solid var(--color-border);
@@ -52,7 +54,7 @@ body {
   border-radius: 12px;
 }
 
-
+/* Optional: you can remove this if gradient bg is no longer used */
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -69,4 +71,32 @@ body {
   background: linear-gradient(-45deg, #ff6b6b, #ffeaa7, #7ed6df, #a29bfe);
   background-size: 400% 400%;
   animation: gradient 15s ease infinite;
+}
+
+.background-blur {
+  background-color: rgba(254, 250, 224, 0.7); /* semi-transparent cream */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.main-content {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.3); /* optional inner layer */
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.font-pacifico {
+  font-family: var(--font-pacifico);
+}
+
+.font-geist-sans {
+  font-family: var(--font-geist-sans);
+}
+
+.font-geist-mono {
+  font-family: var(--font-geist-mono);
 }

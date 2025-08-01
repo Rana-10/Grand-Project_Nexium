@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-// Type for props
 interface FormData {
   ingredients: string[];
   cuisine: string;
@@ -33,7 +32,7 @@ export default function RecipeForm({ onSubmit }: { onSubmit: (data: FormData) =>
     );
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const formData: FormData = {
@@ -43,9 +42,7 @@ export default function RecipeForm({ onSubmit }: { onSubmit: (data: FormData) =>
       diet,
     };
 
-    // Call parent callback if needed
     onSubmit(formData);
-
   };
 
   const filteredIngredients = INGREDIENT_OPTIONS.filter((ing) =>
@@ -54,38 +51,38 @@ export default function RecipeForm({ onSubmit }: { onSubmit: (data: FormData) =>
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-lg px-4">
-      {/* Ingredients Search + Multi-select */}
+      {/* Ingredients */}
       <div>
-        <label className="block mb-2 font-semibold text-white">Ingredients</label>
+        <label className="block mb-2 font-pacifico text-[#283618]">Ingredients</label>
         <input
           type="text"
           placeholder="Search ingredients..."
-          className="w-full p-2 rounded bg-neutral-800 text-white mb-2"
+          className="w-full p-2 rounded bg-[#fefae0] text-[#283618] border border-[#606c38] mb-2"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <div className="max-h-40 overflow-y-auto border border-neutral-700 rounded p-2 bg-neutral-800">
+        <div className="max-h-40 overflow-y-auto border border-[#606c38] rounded p-2 bg-[#fefae0]">
           {filteredIngredients.map((item) => (
-            <div key={item} className="flex items-center gap-2 mb-1 text-white">
-              <input
-                type="checkbox"
-                checked={ingredients.includes(item)}
-                onChange={() => toggleIngredient(item)}
-                className="clickable"
-              />
+            <div key={item} className="flex items-center gap-2 mb-1 text-[#283618]">
+            <input
+            type="checkbox"
+            checked={ingredients.includes(item)}
+            onChange={() => toggleIngredient(item)}
+            className="clickable accent-[#556B2F]"
+            />
               <span>{item}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Cuisine Dropdown */}
+      {/* Cuisine */}
       <div>
-        <label className="block mb-2 font-semibold text-white">Cuisine</label>
+        <label className="block mb-2 font-pacifico text-[#283618]">Cuisine</label>
         <select
           value={cuisine}
           onChange={(e) => setCuisine(e.target.value)}
-          className="clickable w-full p-2 rounded bg-neutral-800 text-white"
+          className="clickable w-full p-2 rounded bg-[#fefae0] text-[#283618] border border-[#606c38]"
         >
           {CUISINES.map((c) => (
             <option key={c}>{c}</option>
@@ -93,13 +90,13 @@ export default function RecipeForm({ onSubmit }: { onSubmit: (data: FormData) =>
         </select>
       </div>
 
-      {/* Meal Type Dropdown */}
+      {/* Meal Type */}
       <div>
-        <label className="block mb-2 font-semibold text-white">Meal Type</label>
+        <label className="block mb-2 font-pacifico text-[#283618]">Meal Type</label>
         <select
           value={mealType}
           onChange={(e) => setMealType(e.target.value)}
-          className="clickable w-full p-2 rounded bg-neutral-800 text-white"
+          className="clickable w-full p-2 rounded bg-[#fefae0] text-[#283618] border border-[#606c38]"
         >
           {MEAL_TYPES.map((m) => (
             <option key={m}>{m}</option>
@@ -107,13 +104,13 @@ export default function RecipeForm({ onSubmit }: { onSubmit: (data: FormData) =>
         </select>
       </div>
 
-      {/* Diet Dropdown */}
+      {/* Diet */}
       <div>
-        <label className="block mb-2 font-semibold text-white">Diet</label>
+        <label className="block mb-2 font-pacifico text-[#283618]">Diet</label>
         <select
           value={diet}
           onChange={(e) => setDiet(e.target.value)}
-          className=" clickable w-full p-2 rounded bg-neutral-800 text-white"
+          className="clickable w-full p-2 rounded bg-[#fefae0] text-[#283618] border border-[#606c38]"
         >
           {DIETS.map((d) => (
             <option key={d}>{d}</option>
@@ -123,7 +120,7 @@ export default function RecipeForm({ onSubmit }: { onSubmit: (data: FormData) =>
 
       <button
         type="submit"
-        className="clickable bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded w-full"
+        className="clickable cursor-pointer bg-[#283618] hover:bg-[#606c38] text-[#fefae0] font-geist-sans py-2 px-4 rounded w-full"
       >
         Submit
       </button>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useEffect } from "react";
 import RecipeForm from "@/components/recipe_form";
 
 interface FormData {
@@ -17,114 +16,107 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
+  const handleFormSubmit = async (data: FormData) => {
+    setLoading(true);
+    setError(null);
+    setDishes(null);
 
-const handleFormSubmit = async (data: FormData) => {
-  console.log("Form Data Submitted:", data);
+    try {
+      const saveResponse = await fetch("/api/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-  setLoading(true);
-  setError(null);
-  setDishes(null);
+      if (!saveResponse.ok) {
+        throw new Error("Failed to save data to Supabase");
+      }
 
-  try {
-    // First, save data to Supabase
-    const saveResponse = await fetch("/api/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+      await saveResponse.json();
 
-    if (!saveResponse.ok) {
-      throw new Error("Failed to save data to Supabase");
+      const suggestResponse = await fetch("/api/suggest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!suggestResponse.ok) {
+        throw new Error("Failed to generate dishes from OpenAI");
+      }
+
+      const suggestResult = await suggestResponse.json();
+      setDishes(suggestResult.dishes || "No dishes found.");
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("Unknown error occurred");
+      }
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const saveResult = await saveResponse.json();
-    console.log("Supabase Save Response:", saveResult);
+  return (
+        <div className="background-blur">
+    <main className="min-h-screen flex flex-col items-center justify-center p-4" style={{ backgroundColor: "var(--color-background)", color: "var(--color-foreground)" }}>
+    <h1 className=" text-5xl font-pacifico text-[#283618] mb-8">Recipe Generator</h1>
 
-    // Then, fetch suggested dishes from OpenAI
-    const suggestResponse = await fetch("/api/suggest", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+      <RecipeForm onSubmit={handleFormSubmit} />
 
-    if (!suggestResponse.ok) {
-      throw new Error("Failed to generate dishes from OpenAI");
-    }
+      {loading && (
+        <p className="mt-6" style={{ color: "var(--color-secondary)" }}>
+          Generating recipes...
+        </p>
+      )}
 
-    const suggestResult = await suggestResponse.json();
-    console.log("OpenAI Suggestion Response:", suggestResult);
+      {error && (
+        <p className="mt-6" style={{ color: "var(--color-secondary)" }}>
+          Error: {error}
+        </p>
+      )}
 
-    setDishes(suggestResult.dishes || "No dishes found.");
-  } catch (error) {
-    if (error instanceof Error) {
-      setError(error.message);
-      console.error("Submission error:", error.message);
-    } else {
-      setError("Unknown error occurred");
-      console.error("Unknown submission error", error);
-    }
-  } finally {
-    setLoading(false);
-  }
+      {dishes && (
+        <>
+          <div className="card mt-6 w-full max-w-xl">
+            <h2 className="text-xl font-semibold mb-4" style={{ color: "var(--color-primary)" }}>
+              Suggested Dishes:
+            </h2>
+            <pre className="whitespace-pre-wrap">{dishes}</pre>
+          </div>
 
-  // const whatsappMessage = encodeURIComponent(dishes);
-  // const whatsappUrl = `https://wa.me/?text=${whatsappMessage}`;
+          <a
+            href={`https://wa.me/?text=${encodeURIComponent(`Here are some dishes GPT suggested:\n\n${dishes}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-block bg-[#556B2F] text-white px-4 py-2 rounded hover:bg-[#556B2F] hover:text-white transition duration-200"
+          >
+            Share on WhatsApp
+          </a>
 
-};
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(`Here are some dishes GPT suggested:\n\n${dishes}`);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            }}
+            className="clickable mt-4 inline-block cursor-pointer bg-[#556B2F] text-white px-4 py-2 rounded hover:bg-[#556B2F] hover:text-white transition duration-200"
+          >
+            Copy to Clipboard
+          </button>
 
-
-return (
-  <main className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center text-white font-sans p-4">
-    <h1 className="text-3xl font-bold text-red-500 mb-6">Recipe Generator</h1>
-
-    <RecipeForm onSubmit={handleFormSubmit} />
-
-    {loading && (
-      <p className="mt-6 text-yellow-400">Generating recipes...</p>
-    )}
-
-    {error && (
-      <p className="mt-6 text-red-500">Error: {error}</p>
-    )}
-
-{dishes && (
-  <>
-    <div className="mt-6 p-4 bg-neutral-800 rounded-lg shadow-md max-w-xl w-full">
-      <h2 className="text-xl font-semibold text-green-400 mb-4">
-        Suggested Dishes:
-      </h2>
-      <pre className="whitespace-pre-wrap">{dishes}</pre>
-    </div>
-
-    <a
-      href={`https://wa.me/?text=${encodeURIComponent(`Here are some dishes GPT suggested:\n\n${dishes}`)}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="bg-green-600 text-white px-4 py-2 rounded mt-4 inline-block"
-    >
-      Share on WhatsApp
-    </a>
-
-    <button
-      onClick={() => {
-        navigator.clipboard.writeText(`Here are some dishes GPT suggested:\n\n${dishes}`);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      }}
-      className="bg-blue-600 text-white px-4 py-2 rounded mt-2 ml-2 inline-block hover:bg-blue-700 transition-colors duration-200 cursor-pointer"
-    >
-      Copy to Clipboard
-    </button>
-
-    {copied && <p className="text-sm text-green-400 mt-1">Copied!</p>}
-  </>
-)}
-
-  </main>
-);
-
+          {copied && (
+            <p className="text-sm mt-1"  style={{ color: "var(--color-primary)" }}>
+              Copied!
+            </p>
+          )}
+        </>
+      )}
+    </main>
+        </div>
+  );
 }
