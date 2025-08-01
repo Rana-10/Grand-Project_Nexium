@@ -61,6 +61,23 @@ export default function Home() {
     }
   };
 
+  const handleWhatsAppShare = () => {
+    if (dishes) {
+      const message = `Here are some dishes GPT suggested:\n\n${dishes}`;
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+      window.open(whatsappUrl, "_blank");
+    }
+  };
+
+  const handleCopy = () => {
+    if (dishes) {
+      navigator.clipboard.writeText(`Here are some dishes GPT suggested:\n\n${dishes}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
         <div className="background-blur">
     <main className="min-h-screen flex flex-col items-center justify-center p-4" style={{ backgroundColor: "var(--color-background)", color: "var(--color-foreground)" }}>
@@ -80,23 +97,23 @@ export default function Home() {
         </p>
       )}
 
-      {dishes && (
-        <>
-          <div className="card mt-6 w-full max-w-xl">
-            <h2 className="text-xl font-semibold mb-4" style={{ color: "var(--color-primary)" }}>
-              Suggested Dishes:
-            </h2>
-            <pre className="whitespace-pre-wrap">{dishes}</pre>
-          </div>
 
-          <a
-            href={`https://wa.me/?text=${encodeURIComponent(`Here are some dishes GPT suggested:\n\n${dishes}`)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-block bg-[#556B2F] text-white px-4 py-2 rounded hover:bg-[#556B2F] hover:text-white transition duration-200"
-          >
-            Share on WhatsApp
-          </a>
+        {dishes && (
+          <>
+            <div className="card mt-6 w-full max-w-xl">
+              <h2 className="text-xl font-semibold mb-4" style={{ color: "var(--color-primary)" }}>
+                Suggested Dishes:
+              </h2>
+              <pre className="whitespace-pre-wrap">{dishes}</pre>
+            </div>
+
+            {/* WhatsApp Share Button */}
+            <button
+              onClick={handleWhatsAppShare}
+              className="mt-4 inline-block bg-[#556B2F] text-white px-4 py-2 rounded hover:bg-[#556B2F] hover:text-white transition duration-200 cursor-pointer"
+            >
+              Share on WhatsApp
+            </button>
 
           <button
             onClick={() => {
